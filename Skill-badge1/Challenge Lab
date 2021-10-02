@@ -1,0 +1,67 @@
+Create and Manage Cloud Resources: Challenge Lab
+
+--------------------------------------------------
+
+Challenge scenario
+
+You have started a new role as a Junior Cloud Engineer for Jooli, Inc. You are expected to help manage the infrastructure at Jooli. 
+Common tasks include provisioning resources for projects.
+
+You are expected to have the skills and knowledge for these tasks, so step-by-step guides are not provided.
+
+Some Jooli, Inc. standards you should follow:
+
+Create all resources in the default region or zone, unless otherwise directed.
+
+Naming normally uses the format team-resource; for example, an instance could be named nucleus-webserver1.
+
+Allocate cost-effective resource sizes. Projects are monitored, and excessive resource use will result in the containing project's termination 
+(and possibly yours), so plan carefully. 
+This is the guidance the monitoring team is willing to share: unless directed, use f1-micro for small Linux VMs, 
+and use n1-standard-1 for Windows or other applications, such as Kubernetes nodes.
+
+Task 1 : Create a project jumphost instance (zone: us-east1-b) 
+
+In order to achieve this task we have two ways 
+
+1. GUI 
+2. Command line Interface
+ 
+(i) click on Compute engine that is present in the notification panel and then create virtual instances in that use N1 series and f1-micro as described in the challenge and then 
+click create and you are done with your Creation of a Virtual instance
+
+2. This is the Command line interface way 👇👇👇
+gcloud compute instances create nucleus-jumphost \
+          --network nucleus-vpc \
+          --zone us-east1-b  \
+          --machine-type f1-micro  \
+          --image-family debian-9  \
+          --image-project debian-cloud 
+         
+Task 2 : Create a Kubernetes service cluster ☸ ☸
+
+1. Create a K8s cluster 
+
+gcloud container clusters create nucleus-backend \
+          --num-nodes 1 \
+          --network nucleus-vpc \
+          --region us-east1
+          
+2. Authenticate the credentials of a cluster
+gcloud container clusters get-credentials nucleus-backend \
+          --region us-east1
+          
+3. Create a new deployment and place the image name there as  provided in the challenge lab
+
+kubectl create deployment hello-server \
+          --image=gcr.io/google-samples/hello-app:2.0
+         
+4. Expose the deployment or application on port 8080 i.e Create a service
+kubectl expose deployment hello-server \
+          --type=LoadBalancer \
+          --port 8080
+          
+Task 3: Set up an HTTP load balancer 👨‍💻 👨‍💻
+
+
+
